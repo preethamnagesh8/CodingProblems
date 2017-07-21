@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct stack_struct
+{
+    int elems[60000];
+    int top;
+};
+
+void displayStack(struct stack_struct *st1);
+bool isempty(struct stack_struct *st);
+void push(struct stack_struct *st1, int elm);
+int pop(struct stack_struct *st1);
+void enqueue(struct stack_struct *st1, int elm);
+void dequeue(struct stack_struct *st1, struct stack_struct *st2);
+int top_elem(struct stack_struct *st1, struct stack_struct *st2);
+
+int main() {
+
+    int length = 0;
+    scanf("%d",&length);
+    
+    struct stack_struct *s1 = (struct stack_struct *)malloc(sizeof(struct stack_struct));
+    s1->top = 0;
+    
+    struct stack_struct *s2 = (struct stack_struct *)malloc(sizeof(struct stack_struct));
+    s2->top = 0;
+    
+    for(int i = 0; i < length; i++){
+        int query, ins_elm;
+        scanf("%d",&query);
+        
+        if(query == 1){
+            scanf("%d",&ins_elm);
+            enqueue(s1, ins_elm);
+        }
+        else if(query == 2){
+            dequeue(s1, s2);
+        }
+        else if(query == 3)
+            printf("%d\n",top_elem(s1, s2));
+    }
+    
+    return 0;
+}
+
+bool isempty(struct stack_struct *st)
+{
+    return st->top == 0 ? true : false;
+}
+
+void push(struct stack_struct *st1, int elm)
+{
+    st1->elems[st1->top++] = elm;
+}
+
+int pop(struct stack_struct *st1)
+{
+    if(isempty(st1))
+        return -1;
+    
+    return st1->elems[--st1->top];
+}
+
+void enqueue(struct stack_struct *st1, int elm)
+{
+    push(st1, elm);
+}
+
+void dequeue(struct stack_struct *st1, struct stack_struct *st2)
+{
+    while(isempty(st1) == false){
+        int push_elm = pop(st1);
+        push(st2,push_elm);
+    }
+    
+    int e = pop(st2);
+    
+    while(isempty(st2) == false){
+        int push_elm = pop(st2);
+        push(st1,push_elm);
+    }
+    
+}
+
+int top_elem(struct stack_struct *st1, struct stack_struct *st2)
+{
+    while(isempty(st1) == false){
+        int push_elm = pop(st1);
+        push(st2,push_elm);
+    }
+    
+    int top_element = st2->elems[(st2->top) - 1];
+    
+    while(isempty(st2) == false){
+        int push_elm = pop(st2);
+        push(st1,push_elm);
+    }
+    
+    return top_element;
+}
+
+void displayStack(struct stack_struct *st1)
+{
+    for(int i = 0; i < st1->top; i++){
+        printf("%d\n",st1->elems[i]);
+    }
+}
