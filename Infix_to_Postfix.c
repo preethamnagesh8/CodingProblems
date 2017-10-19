@@ -10,13 +10,16 @@ typedef struct
     int top;
 }stack;
 
+char* convertToPostfix(char *str, stack *stck);
+
 int main()
 {
     stack s;
     s.top = -1;
-    char str[SIZE] = "5+9*3";
+    char str[SIZE] = "5*9+3";
     
-    convertToPostfix(str, &s);
+    char *postfixSolution = convertToPostfix(str, &s);
+    printf("\nThe postfix form of %s is : %s",str,postfixSolution);
     return 0;
 }
 
@@ -79,7 +82,7 @@ int checkPriority(stack *s, int optr)
     return 0;
 }
 
-void convertToPostfix(char *str, stack *stck)
+char* convertToPostfix(char *str, stack *stck)
 {
     char *postFixString = (char *)(malloc(SIZE * sizeof(char)));
     
@@ -103,5 +106,5 @@ void convertToPostfix(char *str, stack *stck)
         strAppend(postFixString, num);
     }
     
-    printf("\n%s",postFixString);
+    return postFixString;
 }
