@@ -1,68 +1,62 @@
 #include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
 
-#define SIZE 5
+void quicksort(int *, int, int);
+int partition(int *arr, int start, int end);
+void display(int* arr, int len);
 
-void quicksort(int arr[], int start, int end);
-int partition(int arr[], int start, int end);
-
-int main() {
-
-    int array[SIZE];
-    int length = 0;
-    
-    for(int i = 0; i < SIZE - 1; i++){
-        scanf("%d",&array[i]);
-        length++;
-    }
-    
-    quicksort(array, 0 , length-1);
-    
-    printf("\nThe sorted array : ");
-    for(int i = 0; i < SIZE - 1; i++){
-        printf("%d\n",array[i]);
-    }
-    
-    return 0;
+int main(void) 
+{
+    int array[] = {5, 3, 8, 9, 4, 6};
+    display(array, 6);
+    quicksort(array, 0, 5);
+    display(array, 6);
+	return 0;
 }
 
-void quicksort(int arr[], int start, int end)
+void quicksort(int *arr, int start, int end)
 {
     if(start < end){
-        int part = partition(arr, start, end);
-        quicksort(arr, start, part - 1);
-        quicksort(arr, part + 1, end);
+        int pivotPosition = partition(arr, start, end);
+        quicksort(arr, start, pivotPosition-1);
+        quicksort(arr, pivotPosition + 1, end);
     }
 }
 
-int partition(int arr[], int start, int e)
+int partition(int *arr, int start, int end)
 {
-    int pivot = arr[start];
-    int i = start + 1;
-    int j = e;
+    int pivotPos = end;
+    int pivotVal = arr[pivotPos];
+    int i = start;
+    int j = end - 1;
     
-    while(i <= j){
-        
-        while(arr[i] <= pivot && i <= e)
+    while(i < j){
+        while(arr[i] < pivotVal && i < end)
             i++;
         
-        while(arr[j] >= pivot && j > start)
+        while(arr[j] > pivotVal && j > start)
             j--;
-        
-        int temp = arr[j];
-        arr[j] = arr[i];
-        arr[i] = temp;
+            
+        swap(arr, i, j);
     }
-    int t = arr[i];
-    arr[i] = arr[j];
-    arr[j] = t;
+    swap(arr, i, j);
     
-    t = arr[j];
-    arr[j] = arr[start];
-    arr[start] = t;
-    
-    return j;
+    if(arr[i] > arr[pivotPos])
+        swap(arr, i, pivotPos);
+        
+    return i;
 }
 
+void swap(int *arr, int i, int j)
+{
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+void display(int* arr, int len)
+{
+    printf("\nThe elements of the array are : ");
+    for(int i = 0; i < len; i++){
+        printf("%d ",arr[i]);
+    }
+}
