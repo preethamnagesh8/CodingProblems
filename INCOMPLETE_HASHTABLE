@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+#define SIZE 20
+
+struct listStruct{
+    int number;
+    struct listStruct *next;
+};
+typedef struct listStruct list;
+
+list* allocateNode();
+void insertNumber(list **l, int num);
+void displayAllElements(list **l);
+
+int main(void)
+{
+    list *newList[SIZE];
+    for(int i = 0; i < SIZE; i++){
+        newList[i] = allocateNode();
+        newList[i]->number = -1;
+        newList[i]->next = NULL;
+    }
+    
+    insertNumber(newList, 10);
+    insertNumber(newList, 10);
+    insertNumber(newList, 2);
+    insertNumber(newList, 3);
+    insertNumber(newList, 4);
+    insertNumber(newList, 5);
+    insertNumber(newList, 6);
+    
+    displayAllElements(newList);
+    
+	return 0;
+}
+
+list* allocateNode()
+{
+    return (list *) malloc(sizeof(list));    
+}
+
+void displayAllElements(list **l)
+{
+    printf("\nThe Hashtable is : \n");
+    for(int i = 0; i < SIZE; i++){
+        list *temp = l[i];
+        
+        while(temp){
+            printf("%d--->",temp->number);
+            temp = temp->next;
+        }
+        printf("\n");
+    }
+}
+
+void insertNumber(list **l, int num)
+{
+    int bucketNum = num % SIZE;
+    
+    list *temp = allocateNode();
+    temp->number = num;
+    temp->next = l[bucketNum];
+    l[bucketNum] = temp;
+}
